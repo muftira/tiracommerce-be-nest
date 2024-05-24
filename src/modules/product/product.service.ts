@@ -32,7 +32,7 @@ export class ProductService {
     };
   }
 
-  async createProduct({ userId, ...createProductDto }: CreateProductDto) {
+  async createProduct(userId: string, createProductDto : CreateProductDto) {
     if (userId) {
       const user = await this.userModel.findById(userId);
       if (!user) {
@@ -40,7 +40,7 @@ export class ProductService {
       } else {
         const product = await this.productModel.create({
           ...createProductDto,
-          userId,
+          userId
         });
 
         return {
@@ -53,7 +53,29 @@ export class ProductService {
     throw new NotFoundException('user is not found');
   }
 
-  async updateProduct(id: string, updateProductDto: CreateProductDto) {}
+  async updateProduct(id: string, updateProductDto: CreateProductDto) {
+    try {
+      const productId = await this.productModel.findById(id);
+      if(!productId) {
+        throw new NotFoundException('product is not found');
+      } else {
+        const updateProduct = await this.productModel.findByIdAndUpdate(
+          id,
+          updateProductDto,
+          {
+            new: true,
+          },
+        );
+        return {
+          success: true,
+          message: 'product is updated',
+          data: updateProduct,
+        };
+      }
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
+  }
 
   async deleteProduct(id: string) {
     const deleteProduct = await this.productModel.findByIdAndDelete(id, {

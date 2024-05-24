@@ -14,6 +14,6 @@ export class CreateProductDto {
     @IsNotEmpty()
     color: string;
 
-    @IsNotEmpty()
-    userId: string;
+    // @IsNotEmpty()
+    // userId: string;
   }
