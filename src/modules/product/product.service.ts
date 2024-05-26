@@ -4,12 +4,16 @@ import { Product } from './schema/product.schema';
 import { Model } from 'mongoose';
 import { CreateProductDto } from '../product/Dto/createProduct.dto';
 import { User } from '../users/schema/users.schema';
+import { Image } from './schema/image.schema';
+import { Category } from './schema/category.schema';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectModel('Product') private productModel: Model<Product>,
     @InjectModel('User') private userModel: Model<User>,
+    @InjectModel('Image') private imageModel: Model<Image>,
+    @InjectModel('Category') private categoryModel: Model<Category>,
   ) {}
 
   async findAll() {
@@ -22,7 +26,7 @@ export class ProductService {
   }
 
   async findOne(id: string) {
-    const product = await this.productModel.findById(id);
+    const product = await this.productModel.findById(id)
     if (!product) {
       throw new NotFoundException('product is not found');
     }
@@ -32,7 +36,7 @@ export class ProductService {
     };
   }
 
-  async createProduct(userId: string, createProductDto : CreateProductDto) {
+  async createProduct(userId: string, {url, category, ...createProductDto} : CreateProductDto) {
     if (userId) {
       const user = await this.userModel.findById(userId);
       if (!user) {
@@ -42,6 +46,13 @@ export class ProductService {
           ...createProductDto,
           userId
         });
+
+        const image = await this.imageModel.create({
+          url,
+          productId: product._id,
+        });
+
+        const _category = await this.categoryModel.create({categoryName: category});
 
         return {
           success: true,

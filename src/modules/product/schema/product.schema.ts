@@ -2,6 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { User } from 'src/modules/users/schema/users.schema';
 import { v4 as uuidv4 } from 'uuid';
+import { Category } from './category.schema';
 // require('mongoose-double')(mongoose);
 // const SchemaTypes = mongoose.Schema.Types;
 
@@ -14,8 +15,8 @@ export class Product {
       _id: string;
     @Prop({ type: String, ref: 'User' })
     userId: User;
-    @Prop({required: false})
-    categoryId: string;
+    @Prop({ type: String, ref: 'Category' })
+    category: Category;
     @Prop({required: true})
     price: number;
     @Prop({required: true})

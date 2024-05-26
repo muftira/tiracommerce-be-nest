@@ -4,6 +4,8 @@ import { ProductSchema } from './schema/product.schema';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { UserSchema } from '../users/schema/users.schema';
+import { ImageSchema } from './schema/image.schema';
+import { CategorySchema } from './schema/category.schema';
 
 @Module({
   imports: [
@@ -15,6 +17,14 @@ import { UserSchema } from '../users/schema/users.schema';
         {
           name: 'User',
           schema: UserSchema,
+        },
+        {
+          name: 'Image',
+          schema: ImageSchema,
+        },
+        {
+          name: 'Category',
+          schema: CategorySchema,
         }
     ]),
   ],
